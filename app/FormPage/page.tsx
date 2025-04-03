@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import { Loader2 } from "lucide-react"; // For the loading spinner icon
 
 const FormPage = () => {
     const [formData, setFormData] = useState({
@@ -25,6 +26,7 @@ const FormPage = () => {
         user_query: ""
     });
 
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleChange = (e) => {
@@ -33,29 +35,42 @@ const FormPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Start loading
+
         try {
             const response = await fetch("/api/recommendations", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
+
             const data = await response.json();
             sessionStorage.setItem("recommendations", JSON.stringify(data.recommendations));
+
+            setLoading(false); // Stop loading
             router.push("/recommendations");
         } catch (error) {
             console.error("Error:", error);
+            setLoading(false); // Stop loading in case of error
         }
     };
 
     return (
         <section className="max-w-3xl mx-auto p-6">
-            <Button onClick={() => router.back()} className="mb-4 px-4 py-2 bg-gray-700 text-white rounded-md">⬅ Go Back</Button>
+            <Button onClick={() => router.back()} className="mb-4 px-4 py-2 bg-gray-700 text-white rounded-md">
+                ⬅ Go Back
+            </Button>
+
             <Card>
                 <CardContent>
-                    <h2 className="text-3xl font-semibold text-center text-blue-600">Get Your Personalized Recommendations</h2>
-                    <p className="text-center text-gray-500 mt-2">Fill in the details below to receive tailored diet and workout recommendations.</p>
-                    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                    <h2 className="text-3xl font-semibold text-center text-blue-600">
+                        Get Your Personalized Recommendations
+                    </h2>
+                    <p className="text-center text-gray-500 mt-2">
+                        Fill in the details below to receive tailored diet and workout recommendations.
+                    </p>
 
+                    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                         {/* Age */}
                         <div>
                             <label className="block font-semibold text-gray-700">Age</label>
@@ -167,7 +182,20 @@ const FormPage = () => {
                             />
                         </div>
 
-                        <Button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md">Get My Recommendations</Button>
+                        {/* Submit Button with Loader */}
+                        <Button 
+                            type="submit" 
+                            className="w-full bg-blue-600 text-white py-2 rounded-md flex justify-center items-center"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 className="animate-spin mr-2" size={20} /> Generating...
+                                </>
+                            ) : (
+                                "Get My Recommendations"
+                            )}
+                        </Button>
                     </form>
                 </CardContent>
             </Card>
