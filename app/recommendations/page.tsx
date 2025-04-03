@@ -1,5 +1,5 @@
-"use client"
-import { useSearchParams, useRouter } from "next/navigation";
+"use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +11,9 @@ const sections = {
     breakfasts: "Breakfast Ideas",
     lunches: "Lunch Options",
     dinners: "Dinner Options",
+    snacks: "Healthy Snacks",
+    supplements: "Recommended Supplements",
+    hydration_tips: "Hydration Guidelines",
     additional_tips: "Additional Tips"
 };
 
@@ -31,7 +34,7 @@ const Recommendations = () => {
         if (!recommendations) return;
 
         const pdf = new jsPDF();
-        pdf.setFontSize(16);
+        pdf.setFontSize(18);
         pdf.text("Personalized Recommendations", 10, 10);
 
         let y = 20;
@@ -56,36 +59,42 @@ const Recommendations = () => {
                 y += 8;
             }
         });
-        pdf.save("Diet_Plan_Recommendations.pdf");
+
+        pdf.save("Personalized_Recommendations.pdf");
     };
 
     return (
-        <Card className="max-w-2xl mx-auto p-6">
-            <CardContent>
-                <Button onClick={() => router.back()} className="mb-4">Go Back</Button>
-                <Button onClick={handleDownloadPDF} className="ml-4">Download as PDF</Button>
+        <section className="max-w-3xl mx-auto p-6">
+            <Button onClick={() => router.back()} className="mb-4 bg-gray-700 text-white px-4 py-2 rounded-md">
+                ⬅ Go Back
+            </Button>
+            <Button onClick={handleDownloadPDF} className="ml-4 bg-green-600 text-white px-4 py-2 rounded-md">
+                ⬇ Download as PDF
+            </Button>
 
-                <h2 className="text-2xl font-semibold text-center text-blue-600">Personalized Recommendations</h2>
-                <div>
+            <Card className="mt-6">
+                <CardContent>
+                    <h2 className="text-3xl font-semibold text-center text-blue-600">Your Personalized Recommendations</h2>
+                    
                     {!recommendations ? (
-                        <p className="text-center text-gray-600 mt-4">Loading recommendations...</p>
+                        <p className="text-center text-gray-500 mt-4">Loading recommendations... Please wait.</p>
                     ) : (
                         Object.keys(sections).map((section) =>
                             recommendations[section]?.length ? (
-                                <div key={section} className="bg-gray-100 p-4 rounded-lg mt-4 shadow-md">
+                                <div key={section} className="bg-gray-100 p-4 rounded-lg mt-6 shadow-md">
                                     <h3 className="text-lg font-semibold text-blue-600">{sections[section]}</h3>
                                     <ul className="mt-2 space-y-2">
                                         {recommendations[section].map((item, index) => (
-                                            <li key={index} className="p-2 bg-blue-50 rounded-md">{item}</li>
+                                            <li key={index} className="p-2 bg-blue-50 rounded-md">✔ {item}</li>
                                         ))}
                                     </ul>
                                 </div>
                             ) : null
                         )
                     )}
-                </div>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </section>
     );
 };
 
