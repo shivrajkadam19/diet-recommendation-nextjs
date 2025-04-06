@@ -16,14 +16,14 @@ import Link from "next/link"
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col ">
       {/* Navigation Bar */}
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-10">
           {/* Logo Section */}
           <div className="flex items-center gap-2">
             <LucideLeaf className="h-6 w-6 text-green-600" />
-            <span className="text-xl font-bold">NutriAI</span>
+            <span className="text-xl font-bold">Personalised diet and workout recommendations system</span>
           </div>
 
           {/* Navigation Links */}
@@ -331,7 +331,8 @@ export default function Home() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <LucideLeaf className="h-6 w-6 text-green-500" />
-                <span className="text-xl font-bold text-white">NutriAI</span>
+                <span className="text-xl font-bold text-white">Personalised dite and workout recommendations system</span>
+                
               </div>
               <p className="mb-4">AI-powered nutrition plans tailored to your body, goals, and preferences.</p>
               <div className="flex space-x-4">
